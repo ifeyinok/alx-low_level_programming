@@ -1,54 +1,41 @@
-#include <string.h>
-#include <stdlib.h>
 #include "lists.h"
 
 /**
-  * *add_node_end - adds a new node at the end of a linked list.
-  * @head: start of the list.
-  * @str: string.
-  * Return: the address of the new element,
-  * or null if it failed.
-  */
+ * add_node_end - adds a new node at the end
+ * of a list_t list.
+ * @head: head of the linked list.
+ * @str: string to store in the list.
+ * Return: address of the head.
+ */
+
 list_t *add_node_end(list_t **head, const char *str)
 {
-	list_t *newNode;
+	list_t *new_node, *current_node;
+	size_t n;
 
-	newNode = (list_t *)malloc(sizeof(list_t));
-	if (newNode == NULL)
+	new_node = malloc(sizeof(list_t));
+	if (new_node == NULL)
 		return (NULL);
-	newNode->str = strdup(str);
-	newNode->len = string_length(str);
-	newNode->next = NULL;
-	/* check if list is null and make new node the head */
-	if (*head == NULL)
-		*head = newNode;
-	/* else find last node and add new node */
+
+	new_node->str = strdup(str);
+
+	for (n = 0; str[n]; n++)
+		;
+
+	new_node->len = n;
+	new_node->next = NULL;
+	current_node = *head;
+
+	if (current_node == NULL)
+	{
+		*head = new_node;
+	}
 	else
 	{
-		list_t *lastNode = *head;
-		/* last node has to be NULL use while to check */
-		while (lastNode->next != NULL)
-		{
-			lastNode = lastNode->next;
-		}
-		/* if null is found add new node at the end */
-		lastNode->next = newNode;
+		while (current_node->next != NULL)
+			current_node = current_node->next;
+		current_node->next = new_node;
 	}
-	return (newNode);
-}
 
-/**
-  * string_length - finds the length of a string.
-  * Return: length of c.
-  * @pointer: pointer.
-  */
-int string_length(const char *pointer)
-{
-	int c = 0;
-
-	while (*(pointer + c) != '\0')
-	{
-		c++;
-	}
-	return (c);
+	return (*head);
 }
